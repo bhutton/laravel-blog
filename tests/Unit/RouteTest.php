@@ -9,6 +9,8 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 class RouteTest extends TestCase
 {
     use DatabaseMigrations;
+//    protected $session;
+//    protected $timeout = 1200;
 
     /**
      * Test landing page
@@ -72,6 +74,8 @@ class RouteTest extends TestCase
             ->assertSuccessful();
     }
 
+
+
     /**
      * Create mock user ensuring role is set to author
      *
@@ -79,7 +83,10 @@ class RouteTest extends TestCase
      */
     public function authenticateUser(): User
     {
-        return factory(User::class)->create(['role' => 'author']);
+        return factory(User::class)->create([
+            'id' => 1,
+            'name' => 'fred',
+            'role' => 'author']);
     }
 
 }

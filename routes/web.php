@@ -20,3 +20,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('new-post', 'PostController@create');
 
 Route::post('new-post','PostController@store');
+
+Route::get('edit/{slug}','PostController@edit');

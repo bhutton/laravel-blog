@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Posts;
 
 class PostController extends Controller
 {
@@ -30,6 +31,35 @@ class PostController extends Controller
         {
             return redirect('/')->withErrors('You have not sufficient permissions for writing post');
         }
+    }
+
+    public function store(Request $request)
+    {
+        $post = new Posts();
+        $post->title = $request->get('title');
+        $post->body = $request->get('body');
+        $post->slug = str_slug($post->title);
+        $post->author_id = $request->user()->id;
+        if($request->has('save'))
+        {
+            $post->active = 0;
+            $message = 'Post saved successfully';
+        }
+        else
+        {
+            $post->active = 1;
+            $message = 'Post published successfully';
+        }
+        $post->save();
+        return redirect('edit/'.$post->slug)->withMessage($message);
+    }
+
+    public function edit(Request $request,$slug)
+    {
+        $post = Posts::where('slug',$slug)->first();
+        if($post && ($request->user()->id == $post->author_id || $request->user()->is_admin()))
+            return view('posts.edit')->with('post',$post);
+        return redirect('/')->withErrors('you have not sufficient permissions');
     }
 }
 
