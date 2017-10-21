@@ -9,8 +9,6 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 class RouteTest extends TestCase
 {
     use DatabaseMigrations;
-//    protected $session;
-//    protected $timeout = 1200;
 
     /**
      * Test landing page
@@ -48,18 +46,6 @@ class RouteTest extends TestCase
             ->assertSuccessful();
     }
 
-    /**
-     * Check invalid login/nologin cannot open /new-post
-     */
-    public function testCreateNewPostInvalidUser()
-    {
-        $user = factory(User::class)->create();
-
-        $this->actingAs($user)
-            ->withSession(['users' => 'fred bloggs'])
-            ->get('/new-post')
-            ->assertStatus(302);
-    }
 
     /**
      * Check valid user can open /new-post
@@ -73,7 +59,6 @@ class RouteTest extends TestCase
             ->get('/new-post')
             ->assertSuccessful();
     }
-
 
 
     /**
