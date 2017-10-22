@@ -116,6 +116,18 @@ class PostController extends Controller
         return view('posts.show')->withPost($post)->withComments($comments);
     }
 
+    public function list($id)
+    {
+        $post = Posts::where('author_id',$id)->first();
+        if(!$post)
+        {
+            return redirect('/')->withErrors('requested page not found');
+        }
+        $comments = $post->comments;
+        return view('posts.show')->withPost($post)->withComments($comments);
+    }
+
+
     public function destroy(Request $request, $id)
     {
         //

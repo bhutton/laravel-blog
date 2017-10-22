@@ -15,7 +15,7 @@ Auth::routes();
 
 Route::get('/','PostController@index');
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'PostController@index');
 
 Route::get('new-post', 'PostController@create');
 
@@ -28,5 +28,7 @@ Route::post('update','PostController@update');
 Route::get('delete/{id}','PostController@destroy');
 
 Route::get('/{slug}',['as' => 'post', 'uses' => 'PostController@show'])->where('slug', '[A-Za-z0-9-_]+');
+
+Route::get('/user/{id}/posts','PostController@list');
 
 Route::get('/auth/logout', 'Auth\LoginController@logout');

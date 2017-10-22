@@ -28,7 +28,7 @@ class RouteTest extends TestCase
     public function testHomeShowsLogin()
     {
         $this->assertTrue(true);
-        $response = $this->get('/home');
+        $response = $this->get('/new-post');
         $response->assertStatus(302);
         $response->assertSee('/login');
     }
