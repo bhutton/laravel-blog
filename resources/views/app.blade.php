@@ -74,17 +74,17 @@
         </p>
       </div>
       @endif
-      @if ($errors->any())
-      <div class='flash alert-danger'>
-        <ul class="panel-body">
-          @foreach ( $errors->all() as $error )
-          <li>
-            {{ $error }}
-          </li>
-          @endforeach
-        </ul>
-      </div>
-      @endif
+      {{--@if ($errors->any())--}}
+      {{--<div class='flash alert-danger'>--}}
+        {{--<ul class="panel-body">--}}
+          {{--@foreach ( $errors->all() as $error )--}}
+          {{--<li>--}}
+            {{--{{ $error }}--}}
+          {{--</li>--}}
+          {{--@endforeach--}}
+        {{--</ul>--}}
+      {{--</div>--}}
+      {{--@endif--}}
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
           <div class="panel panel-default">
@@ -100,7 +100,7 @@
       </div>
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
-          <p>Copyright © 2015 | <a href="http://www.findalltogether.com">Find All Together</a></p>
+          <p>Copyright © 2017 | <a href="http://benhutton.com.au">Ben Hutton</a></p>
         </div>
       </div>
     </div>

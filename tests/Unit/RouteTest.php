@@ -47,6 +47,28 @@ class RouteTest extends TestCase
     }
 
     /**
+     * Test login and logout
+     */
+    public function testLoginLogout()
+    {
+        $user = $this->authenticateUser();
+
+        $response = $this->actingAs($user)
+            ->withSession(['users' => 'fred bloggs'])
+            ->get('/home');
+        $response->assertSuccessful();
+        $this->actingAs($user)
+            ->withSession(['users' => 'fred bloggs'])
+            ->get('/auth/logout');
+
+        $this->assertTrue(true);
+        $response = $this->get('/home');
+        $response->assertStatus(302);
+        $response->assertSee('/login');
+
+    }
+
+    /**
      * Create mock user ensuring role is set to author
      *
      * @return User

@@ -85,6 +85,37 @@ class PostTestWithoutMiddleware extends TestCase
         $response = $this->actingAs($user)->post('/update', $case);
         $response->assertStatus(302);
         $response->assertSessionHas('message', "Post updated successfully");
+
+        $response = $this->actingAs($user)->get('/test', $case);
+        $response->assertSuccessful();
+    }
+
+    /**
+     * Create a post then delete it
+     */
+    public function testUserCanDeletePost()
+    {
+        $this->withoutMiddleware();
+
+        $user = $this->authenticateUser();
+
+        $case = factory(Posts::class)->raw(
+            [
+                'author_id', 1,
+                'id', 1,
+                'title' => 'test',
+                'body' => '123',
+                'slug' => 'adkf'
+            ]);
+
+        $response = $this->actingAs($user)
+            ->post('/new-post', $case);
+
+        $response->assertSee('/test');
+        $response = $this->actingAs($user)->get('delete/1');
+        $response->assertStatus(302);
+        $response->assertSessionHas('message', "Post deleted Successfully");
+
     }
 
     /**

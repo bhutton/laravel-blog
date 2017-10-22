@@ -115,5 +115,21 @@ class PostController extends Controller
         $comments = $post->comments;
         return view('posts.show')->withPost($post)->withComments($comments);
     }
+
+    public function destroy(Request $request, $id)
+    {
+        //
+        $post = Posts::find($id);
+        if($post && ($post->author_id == $request->user()->id || $request->user()->is_admin()))
+        {
+            $post->delete();
+            $data['message'] = 'Post deleted Successfully';
+        }
+        else
+        {
+            $data['errors'] = 'Invalid Operation. You have not sufficient permissions';
+        }
+        return redirect('/')->with($data);
+    }
 }
 
