@@ -18,10 +18,11 @@ $factory->define(App\Posts::class, function (Faker $faker) {
 
     return [
         'title' => $faker->unique()->title,
-        'body' => $faker->text,
+        'body' => $faker->text(),
         'author_id' => $id,
         'slug' => $faker->text,
         'active' => $faker->boolean,
-        'id' => $id
+        'id' => $id,
+        'post_id' => $id
     ];
 });

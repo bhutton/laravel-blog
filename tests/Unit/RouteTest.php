@@ -46,21 +46,6 @@ class RouteTest extends TestCase
             ->assertSuccessful();
     }
 
-
-    /**
-     * Check valid user can open /new-post
-     */
-    public function testNewPostGet()
-    {
-        $user = $this->authenticateUser();
-
-        $this->actingAs($user)
-            ->withSession(['foo' => 'bar'])
-            ->get('/new-post')
-            ->assertSuccessful();
-    }
-
-
     /**
      * Create mock user ensuring role is set to author
      *

@@ -2,16 +2,28 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 use App\User;
 use App\Posts;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
-class PostTest extends TestCase
+
+class PostTestWithoutMiddleware extends TestCase
 {
-    use WithoutMiddleware;
     use DatabaseMigrations;
+
+    /**
+     * Check user can login and see new-post form
+     */
+    public function testNewPostGet()
+    {
+        $user = $this->authenticateUser();
+
+        $this->actingAs($user)
+            ->withSession(['foo' => 'bar'])
+            ->get('new-post')
+            ->assertSuccessful();
+    }
 
     /**
      * Check invalid login/nologin cannot open /new-post
@@ -26,12 +38,13 @@ class PostTest extends TestCase
             ->assertStatus(302);
     }
 
-
     /**
      * Check valid user can open /new-post
      */
     public function testNewPostCreation()
     {
+        $this->withoutMiddleware();
+
         $user = $this->authenticateUser();
 
         $case = factory(Posts::class)->raw(
@@ -46,6 +59,32 @@ class PostTest extends TestCase
 
         $response->assertStatus(302);
         $response->assertSee('edit/test');
+    }
+
+    /**
+     * Check user can update post
+     */
+    public function testNewPostCreationUpdate()
+    {
+        $this->withoutMiddleware();
+
+        $user = $this->authenticateUser();
+
+        $case = factory(Posts::class)->raw(
+            [
+                'author_id', 1,
+                'title' => 'test',
+                'body' => '123',
+                'slug' => 'adkf'
+            ]);
+
+        $response = $this->actingAs($user)
+            ->post('/new-post', $case);
+
+        $response->assertSee('edit/test');
+        $response = $this->actingAs($user)->post('/update', $case);
+        $response->assertStatus(302);
+        $response->assertSessionHas('message', "Post updated successfully");
     }
 
     /**

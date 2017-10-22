@@ -22,3 +22,7 @@ Route::get('new-post', 'PostController@create');
 Route::post('new-post','PostController@store');
 
 Route::get('edit/{slug}','PostController@edit');
+
+Route::post('update','PostController@update');
+
+Route::get('/{slug}',['as' => 'post', 'uses' => 'PostController@show'])->where('slug', '[A-Za-z0-9-_]+');
