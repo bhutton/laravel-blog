@@ -36,13 +36,13 @@ class RouteTest extends TestCase
     /**
      * Test logging in a going to homepage
      */
-    public function testHomeLogsIn()
+    public function testNewPostLogIn()
     {
         $user = $this->authenticateUser();
 
         $this->actingAs($user)
             ->withSession(['users' => 'fred bloggs'])
-            ->get('/home')
+            ->get('/new-post')
             ->assertSuccessful();
     }
 
@@ -55,14 +55,14 @@ class RouteTest extends TestCase
 
         $response = $this->actingAs($user)
             ->withSession(['users' => 'fred bloggs'])
-            ->get('/home');
+            ->get('/new-post');
         $response->assertSuccessful();
         $this->actingAs($user)
             ->withSession(['users' => 'fred bloggs'])
             ->get('/auth/logout');
 
         $this->assertTrue(true);
-        $response = $this->get('/home');
+        $response = $this->get('/new-post');
         $response->assertStatus(302);
         $response->assertSee('/login');
 

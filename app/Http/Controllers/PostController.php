@@ -7,17 +7,9 @@ use App\Posts;
 
 class PostController extends Controller
 {
-    public function index()
+    public function __construct()
     {
-        //fetch 5 posts from database which are active and latest
-        $posts = Posts::where('active',1)->orderBy('created_at','desc')->paginate(5);
-        //page heading
-        $title = 'Latest Posts';
-        //return home.blade.php template from resources/views folder
-        return view('home')->withPosts($posts)->withTitle($title);
-
-        return view('home')->withTitle('home');
-//
+        $this->middleware('auth');
     }
 
     public function create(Request $request)
@@ -64,7 +56,6 @@ class PostController extends Controller
 
     public function update(Request $request)
     {
-        //
         $post_id = $request->input('post_id');
         $post = Posts::find($post_id);
         if($post && ($post->author_id == $request->user()->id || $request->user()->is_admin()))
@@ -118,19 +109,18 @@ class PostController extends Controller
 
     public function list($id)
     {
-        $post = Posts::where('author_id',$id)->first();
-        if(!$post)
-        {
-            return redirect('/')->withErrors('requested page not found');
-        }
-        $comments = $post->comments;
-        return view('posts.show')->withPost($post)->withComments($comments);
+        //fetch 5 posts from database which are active and latest
+        $posts = Posts::where('author_id',$id)->orderBy('created_at','desc')->paginate(5);
+        //page heading
+        $title = 'Latest Posts';
+        //return home.blade.php template from resources/views folder
+        return view('list')->withPosts($posts)->withTitle($title);
+        return view('list')->withTitle('list');
     }
 
 
     public function destroy(Request $request, $id)
     {
-        //
         $post = Posts::find($id);
         if($post && ($post->author_id == $request->user()->id || $request->user()->is_admin()))
         {

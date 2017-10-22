@@ -1,6 +1,6 @@
 @extends('app')
 @section('title')
-    {{--{{$title}}--}}
+    {{$title}}
 @endsection
 @section('content')
     @if ( !$posts->count() )

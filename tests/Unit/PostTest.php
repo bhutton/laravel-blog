@@ -134,7 +134,12 @@ class PostTestWithoutMiddleware extends TestCase
                 'title' => 'test',
                 'body' => '123',
                 'slug' => 'adkf'
-            ],
+            ]);
+
+        $this->actingAs($user)
+            ->post('/new-post', $case);
+
+        $case = factory(Posts::class)->raw(
             [
                 'author_id', 1,
                 'id', 2,
@@ -146,45 +151,14 @@ class PostTestWithoutMiddleware extends TestCase
         $this->actingAs($user)
             ->post('/new-post', $case);
 
-        $response = $this->actingAs($user)->get('/');
+
+        $response = $this->get('/');
         $response->assertStatus(200);
         $response->assertSee('test');
         $response->assertSee('test2');
     }
 
-    /**
-     * Test listing posts
-     */
-    public function testUserCanListPosts()
-    {
-        $this->withoutMiddleware();
-
-        $user = $this->authenticateUser();
-
-        $case = factory(Posts::class)->raw(
-            [
-                'author_id', 1,
-                'id', 1,
-                'title' => 'test',
-                'body' => '123',
-                'slug' => 'adkf'
-            ],
-            [
-                'author_id', 1,
-                'id', 2,
-                'title' => 'test2',
-                'body' => '123',
-                'slug' => 'adkf'
-            ]);
-
-        $this->actingAs($user)
-            ->post('/new-post', $case);
-
-        $response = $this->actingAs($user)->get('user/1/posts');
-        $response->assertStatus(200);
-        $response->assertSee('test');
-//        $response->assertSee('test2');
-    }
+    
 
     /**
      * Create mock user ensuring role is set to author
