@@ -1,7 +1,8 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 use App\User;
 use App\Posts;
@@ -158,7 +159,86 @@ class PostTestWithoutMiddleware extends TestCase
         $response->assertSee('test2');
     }
 
-    
+    /**
+     * Test listing posts
+     */
+    public function testUserCanListPosts()
+    {
+        $this->withoutMiddleware();
+        $user = $this->authenticateUser();
+
+        $case = factory(Posts::class)->raw(
+            [
+                'author_id', 1,
+                'id', 1,
+                'title' => 'test',
+                'body' => '123',
+                'slug' => 'adkf'
+            ]);
+
+        $this->actingAs($user)
+            ->post('/new-post', $case);
+
+        $case = factory(Posts::class)->raw(
+            [
+                'author_id', 1,
+                'id', 2,
+                'title' => 'test2',
+                'body' => '123',
+                'slug' => 'adkf'
+            ]);
+
+        $this->actingAs($user)
+            ->post('/new-post', $case);
+
+        $response = $this->actingAs($user)->get('user/1/posts');
+        $response->assertSuccessful();
+        $response->assertSee('test');
+        $response->assertSee('test2');
+    }
+
+    public function testAnyoneCanViewPost()
+    {
+//        $this->withoutMiddleware();
+//        $user = $this->authenticateUser();
+//
+//        $case = factory(Posts::class)->raw(
+//            [
+//                'author_id' => 1,
+//                'id' => 1,
+//                'title' => 'test',
+//                'body' => '123',
+//                'slug' => 'adkf',
+//                'active' => True,
+//
+//            ]);
+//
+//
+//        $response = $this->actingAs($user)
+//            ->post('/new-post', $case);
+//
+//        Auth::logout();
+//        $this->get('/logout');
+//        $response2 = $this->get('/test');
+//        $response2->assertSee('/test');
+//        $response2->assertViewIs('posts.show');
+
+
+
+        $data = factory(Posts::class)->create(
+            [
+                'author_id' => 1,
+                'id' => 1,
+                'title' => 'test',
+                'body' => '123',
+                'slug' => 'test',
+                'active' => True,
+
+            ]);
+
+        $response = $this->get('/test');
+        $response->assertSee('/test');
+    }
 
     /**
      * Create mock user ensuring role is set to author

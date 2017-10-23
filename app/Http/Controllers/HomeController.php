@@ -23,4 +23,19 @@ class HomeController extends Controller
         return view('home')->withTitle('home');
     }
 
+    /**
+     * @param $slug
+     * @return $this
+     */
+    public function show($slug)
+    {
+        $post = Posts::where('slug',$slug)->first();
+        if(!$post)
+        {
+            return redirect('/')->withErrors('requested page not found');
+        }
+        $comments = $post->comments;
+        return view('posts.show')->withPost($post)->withComments($comments);
+    }
+
 }

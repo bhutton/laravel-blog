@@ -9,9 +9,16 @@ class PostController extends Controller
 {
     public function __construct()
     {
+        // If user isn't logged in this will redirect to the login page.
         $this->middleware('auth');
     }
 
+    /**
+     * Display create post form
+     *
+     * @param Request $request
+     * @return $this|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function create(Request $request)
     {
         // if user can post i.e. user is admin or author
@@ -25,6 +32,12 @@ class PostController extends Controller
         }
     }
 
+    /**
+     * Write the post to database.  Takes input from create post form above.
+     *
+     * @param Request $request
+     * @return mixed
+     */
     public function store(Request $request)
     {
         $post = new Posts();
@@ -46,6 +59,13 @@ class PostController extends Controller
         return redirect('edit/'.$post->slug)->withMessage($message);
     }
 
+    /**
+     * Display existing post in edit form.
+     *
+     * @param Request $request
+     * @param $slug
+     * @return $this
+     */
     public function edit(Request $request,$slug)
     {
         $post = Posts::where('slug',$slug)->first();
@@ -54,10 +74,16 @@ class PostController extends Controller
         return redirect('/')->withErrors('you have not sufficient permissions');
     }
 
+    /**
+     * Write changes from derived from edit form to database
+     *
+     * @param Request $request
+     * @return $this
+     */
     public function update(Request $request)
     {
-        $post_id = $request->input('post_id');
-        $post = Posts::find($post_id);
+        $id = $request->input('id');
+        $post = Posts::find($id);
         if($post && ($post->author_id == $request->user()->id || $request->user()->is_admin()))
         {
             $title = $request->input('title');
@@ -65,7 +91,7 @@ class PostController extends Controller
             $duplicate = Posts::where('slug',$slug)->first();
             if($duplicate)
             {
-                if($duplicate->id != $post_id)
+                if($duplicate->id != $id)
                 {
                     return redirect('edit/'.$post->slug)->withErrors('Title already exists.')->withInput();
                 }
@@ -96,6 +122,10 @@ class PostController extends Controller
         }
     }
 
+    /**
+     * @param $slug
+     * @return $this
+     */
     public function show($slug)
     {
         $post = Posts::where('slug',$slug)->first();
@@ -107,18 +137,25 @@ class PostController extends Controller
         return view('posts.show')->withPost($post)->withComments($comments);
     }
 
+    /**
+     * List all posts from logged in user
+     *
+     * @param $id
+     * @return mixed
+     */
     public function list($id)
     {
-        //fetch 5 posts from database which are active and latest
         $posts = Posts::where('author_id',$id)->orderBy('created_at','desc')->paginate(5);
-        //page heading
         $title = 'Latest Posts';
-        //return home.blade.php template from resources/views folder
         return view('list')->withPosts($posts)->withTitle($title);
         return view('list')->withTitle('list');
     }
 
-
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy(Request $request, $id)
     {
         $post = Posts::find($id);

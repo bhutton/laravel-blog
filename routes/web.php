@@ -27,7 +27,7 @@ Route::post('update','PostController@update');
 
 Route::get('delete/{id}','PostController@destroy');
 
-Route::get('/{slug}',['as' => 'post', 'uses' => 'PostController@show'])->where('slug', '[A-Za-z0-9-_]+');
+Route::get('/{slug}',['as' => 'post', 'uses' => 'HomeController@show'])->where('slug', '[A-Za-z0-9-_]+');
 
 Route::get('/user/{id}/posts','PostController@list');
 
