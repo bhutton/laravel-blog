@@ -9,9 +9,7 @@ class PostFormRequest extends Request {
     public function authorize()
     {
         if($this->user()->can_post())
-        {
             return true;
-        }
         return false;
     }
     /**

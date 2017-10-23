@@ -31,4 +31,8 @@ Route::get('/{slug}',['as' => 'post', 'uses' => 'HomeController@show'])->where('
 
 Route::get('/user/{id}/posts','PostController@list');
 
+Route::get('/user/{id}','UserController@profile')->where('id', '[0-9]+');
+
+Route::get('/comment/add','CommentController@add');
+
 Route::get('/auth/logout', 'Auth\LoginController@logout');
