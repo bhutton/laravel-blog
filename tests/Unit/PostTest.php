@@ -246,18 +246,27 @@ class PostTest extends TestCase
 
     public function testAddComment()
     {
+        $this->withoutMiddleware();
+        $user = $this->authenticateUser();
+
         factory(Posts::class)->create(
             [
                 'author_id' => 1,
                 'id' => 1,
-                'title' => 'test',
+                'title' => 'test34534',
                 'body' => '123',
-                'slug' => 'test',
+                'slug' => 'test234234',
                 'active' => True,
             ]);
 
-        $response = $this->get('/comment/add');
-        $response->assertSuccessful();
+        $comment = factory(Posts::class)->raw(
+            [
+                'body' => 'some text',
+                'on_post' => 1
+            ]);
+
+        $response = $this->actingAs($user)->post('/comment/add', $comment);
+        $response->assertStatus(302);
     }
 
 

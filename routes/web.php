@@ -33,6 +33,6 @@ Route::get('/user/{id}/posts','PostController@list');
 
 Route::get('/user/{id}','UserController@profile')->where('id', '[0-9]+');
 
-Route::get('/comment/add','CommentController@add');
+Route::post('/comment/add','CommentController@store');
 
 Route::get('/auth/logout', 'Auth\LoginController@logout');
