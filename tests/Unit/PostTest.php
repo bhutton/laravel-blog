@@ -73,6 +73,7 @@ class PostTest extends TestCase
         $case = factory(Posts::class)->raw(
             [
                 'author_id', 1,
+                'post_id' => 1,
                 'title' => 'test',
                 'body' => '123',
                 'slug' => 'adkf'
