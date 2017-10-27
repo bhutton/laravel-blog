@@ -66,76 +66,29 @@ class PostTest extends TestCase
      */
     public function testNewPostCreationUpdate()
     {
-
-        factory(Posts::class)->create(
-            [
-                'author_id' => 1,
-                'id' => 1,
-                'title' => 'test34534',
-                'body' => '123',
-                'slug' => 'test234234',
-                'active' => True,
-            ]);
-
         $this->withoutMiddleware();
 
         $user = $this->authenticateUser();
 
-
         $case = factory(Posts::class)->raw(
             [
-                'author_id' => 1,
+                'author_id', 1,
                 'post_id' => 1,
                 'title' => 'test',
-                'body' => 'this is my updated article',
-                'slug' => 'adkf'
-            ]);
-
-        $response = $this->actingAs($user)->post('/update', $case);
-        $response->assertStatus(302);
-        $response->assertSessionHas('message', "Post updated successfully");
-
-        $response = $this->actingAs($user)->get('/test234234', $case);
-        $response->assertSee('this is my updated article');
-    }
-
-    /**
-     * Check user can update post
-     */
-    public function testNewPostCreationUpdateWithDate()
-    {
-
-        factory(Posts::class)->create(
-            [
-                'author_id' => 1,
-                'id' => 1,
-                'title' => 'test34534',
                 'body' => '123',
-                'slug' => 'test234234',
-
-                'active' => True,
-            ]);
-
-        $this->withoutMiddleware();
-
-        $user = $this->authenticateUser();
-
-
-        $case = factory(Posts::class)->raw(
-            [
-                'author_id' => 1,
-                'post_id' => 1,
-                'title' => 'test',
-                'body' => 'this is my updated article',
                 'slug' => 'adkf'
             ]);
 
+        $response = $this->actingAs($user)
+            ->post('/new-post', $case);
+
+        $response->assertSee('edit/test');
         $response = $this->actingAs($user)->post('/update', $case);
         $response->assertStatus(302);
         $response->assertSessionHas('message', "Post updated successfully");
 
-        $response = $this->actingAs($user)->get('/test234234', $case);
-        $response->assertSee('this is my updated article');
+        $response = $this->actingAs($user)->get('/test', $case);
+        $response->assertSuccessful();
     }
 
     /**
@@ -150,7 +103,7 @@ class PostTest extends TestCase
         $case = factory(Posts::class)->raw(
             [
                 'author_id', 1,
-                'post_id', 1,
+                'id', 1,
                 'title' => 'test',
                 'body' => '123',
                 'slug' => 'adkf'
@@ -175,7 +128,7 @@ class PostTest extends TestCase
 
         $user = $this->authenticateUser();
 
-        $case1 = factory(Posts::class)->raw(
+        $case = factory(Posts::class)->raw(
             [
                 'author_id', 1,
                 'id', 1,
@@ -185,19 +138,20 @@ class PostTest extends TestCase
             ]);
 
         $this->actingAs($user)
-            ->post('/new-post', $case1);
+            ->post('/new-post', $case);
 
-        $case2 = factory(Posts::class)->raw(
+        $case = factory(Posts::class)->raw(
             [
                 'author_id', 1,
                 'id', 2,
                 'title' => 'test2',
-                'body' => '12332423',
-                'slug' => 'adkf1'
+                'body' => '123',
+                'slug' => 'adkf'
             ]);
 
         $this->actingAs($user)
-            ->post('/new-post', $case2);
+            ->post('/new-post', $case);
+
 
         $response = $this->get('/');
         $response->assertStatus(200);
