@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use App\User;
-//use App\Posts;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 

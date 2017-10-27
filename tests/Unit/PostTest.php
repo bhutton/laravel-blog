@@ -66,28 +66,37 @@ class PostTest extends TestCase
      */
     public function testNewPostCreationUpdate()
     {
+
+        factory(Posts::class)->create(
+            [
+                'author_id' => 1,
+                'id' => 1,
+                'title' => 'test34534',
+                'body' => '123',
+                'slug' => 'test234234',
+                'active' => True,
+            ]);
+
         $this->withoutMiddleware();
 
         $user = $this->authenticateUser();
 
+
         $case = factory(Posts::class)->raw(
             [
-                'author_id', 1,
+                'author_id' => 1,
+                'post_id' => 1,
                 'title' => 'test',
-                'body' => '123',
+                'body' => 'this is my updated article',
                 'slug' => 'adkf'
             ]);
 
-        $response = $this->actingAs($user)
-            ->post('/new-post', $case);
-
-        $response->assertSee('edit/test');
         $response = $this->actingAs($user)->post('/update', $case);
         $response->assertStatus(302);
         $response->assertSessionHas('message', "Post updated successfully");
 
-        $response = $this->actingAs($user)->get('/test', $case);
-        $response->assertSuccessful();
+        $response = $this->actingAs($user)->get('/test234234', $case);
+        $response->assertSee('this is my updated article');
     }
 
     /**
@@ -102,7 +111,7 @@ class PostTest extends TestCase
         $case = factory(Posts::class)->raw(
             [
                 'author_id', 1,
-                'id', 1,
+                'post_id', 1,
                 'title' => 'test',
                 'body' => '123',
                 'slug' => 'adkf'
@@ -150,7 +159,6 @@ class PostTest extends TestCase
 
         $this->actingAs($user)
             ->post('/new-post', $case);
-
 
         $response = $this->get('/');
         $response->assertStatus(200);

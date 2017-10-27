@@ -46,6 +46,7 @@ class PostController extends Controller
         $post->body = $request->get('body');
         $post->slug = str_slug($post->title);
         $post->author_id = $request->user()->id;
+
         if($request->has('save'))
         {
             $post->active = 0;
@@ -83,7 +84,7 @@ class PostController extends Controller
      */
     public function update(Request $request)
     {
-        $id = $request->input('id');
+        $id = $request->input('post_id');
         $post = Posts::find($id);
         if($post && ($post->author_id == $request->user()->id || $request->user()->is_admin()))
         {
@@ -105,7 +106,7 @@ class PostController extends Controller
             $post->body = $request->input('body');
             if($request->has('save'))
             {
-                $post->active = 0;
+                $post->activ®e = 0;
                 $message = 'Post saved successfully';
                 $landing = 'edit/'.$post->slug;
             }
