@@ -73,7 +73,7 @@ class RouteTest extends TestCase
     {
         $response = $this->get('/register');
         $response->assertSee('/login');
-        $response->assertStatus(302);
+        $response->assertSuccessful();
 
 
     }
