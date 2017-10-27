@@ -92,6 +92,45 @@ class PostTest extends TestCase
     }
 
     /**
+     * Check user can update post
+     */
+    public function testNewPostCreationUpdateWithDate()
+    {
+
+        factory(Posts::class)->create(
+            [
+                'author_id' => 1,
+                'id' => 1,
+                'title' => 'test34534',
+                'body' => '123',
+                'slug' => 'test234234',
+
+                'active' => True,
+            ]);
+
+        $this->withoutMiddleware();
+
+        $user = $this->authenticateUser();
+
+
+        $case = factory(Posts::class)->raw(
+            [
+                'author_id' => 1,
+                'post_id' => 1,
+                'title' => 'test',
+                'body' => 'this is my updated article',
+                'slug' => 'adkf'
+            ]);
+
+        $response = $this->actingAs($user)->post('/update', $case);
+        $response->assertStatus(302);
+        $response->assertSessionHas('message', "Post updated successfully");
+
+        $response = $this->actingAs($user)->get('/test234234', $case);
+        $response->assertSee('this is my updated article');
+    }
+
+    /**
      * Create a post then delete it
      */
     public function testUserCanDeletePost()
@@ -128,7 +167,7 @@ class PostTest extends TestCase
 
         $user = $this->authenticateUser();
 
-        $case = factory(Posts::class)->raw(
+        $case1 = factory(Posts::class)->raw(
             [
                 'author_id', 1,
                 'id', 1,
@@ -138,19 +177,19 @@ class PostTest extends TestCase
             ]);
 
         $this->actingAs($user)
-            ->post('/new-post', $case);
+            ->post('/new-post', $case1);
 
-        $case = factory(Posts::class)->raw(
+        $case2 = factory(Posts::class)->raw(
             [
                 'author_id', 1,
                 'id', 2,
                 'title' => 'test2',
-                'body' => '123',
-                'slug' => 'adkf'
+                'body' => '12332423',
+                'slug' => 'adkf1'
             ]);
 
         $this->actingAs($user)
-            ->post('/new-post', $case);
+            ->post('/new-post', $case2);
 
 
         $response = $this->get('/');

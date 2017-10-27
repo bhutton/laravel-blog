@@ -68,6 +68,15 @@ class RouteTest extends TestCase
 
     }
 
+    public function testRegisterPage()
+
+    {
+        $response = $this->get('/register');
+        $response->assertSee('/login');
+        $response->assertStatus(302);
+
+
+    }
     /**
      * Create mock user ensuring role is set to author
      *
