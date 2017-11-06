@@ -106,7 +106,7 @@ class PostController extends Controller
             $post->body = $request->input('body');
             if($request->has('save'))
             {
-                $post->activ®e = 0;
+                $post->active = 0;
                 $message = 'Post saved successfully';
                 $landing = 'edit/'.$post->slug;
             }
