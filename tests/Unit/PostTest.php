@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use phpDocumentor\Reflection\Types\Null_;
 use Tests\TestCase;
 use App\User;
 use App\Posts;
@@ -58,6 +59,29 @@ class PostTest extends TestCase
             ->post('/new-post', $case);
 
         $response->assertStatus(302);
+        $response->assertSee('edit/test');
+    }
+
+    /**
+     * Test creating new post without content
+     */
+    public function testNewPostCreationWithoutContent()
+    {
+        $this->withoutMiddleware();
+
+        $user = $this->authenticateUser();
+
+        $case = factory(Posts::class)->raw(
+            [
+                'title' => 'test',
+                'body' => Null,
+                'slug' => 'adkf'
+            ]);
+
+        $response = $this->actingAs($user)
+            ->post('/new-post', $case);
+
+        $response->assertStatus(500);
         $response->assertSee('edit/test');
     }
 
