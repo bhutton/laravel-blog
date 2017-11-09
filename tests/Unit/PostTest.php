@@ -81,7 +81,7 @@ class PostTest extends TestCase
         $response = $this->actingAs($user)
             ->post('/new-post', $case);
 
-        $response->assertStatus(500);
+        $response->assertStatus(302);
         $response->assertSee('edit/test');
     }
 
