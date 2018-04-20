@@ -23,6 +23,5 @@ $factory->define(App\Posts::class, function (Faker $faker) {
         'slug' => $faker->text,
         'active' => $faker->boolean,
         'id' => $id,
-//        'post_id' => $id
     ];
 });
