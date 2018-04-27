@@ -269,6 +269,22 @@ class PostTest extends TestCase
         $response->assertSee('/test');
     }
 
+    public function testCanViewUnpublishedPost()
+    {
+        factory(Posts::class)->create(
+            [
+                'author_id' => 1,
+                'id' => 1,
+                'title' => 'test',
+                'body' => '123',
+                'slug' => 'test',
+                'active' => False,
+            ]);
+
+        $response = $this->get('/test');
+        $response->assertSee('/test');
+    }
+
     public function testAddComment()
     {
         $this->withoutMiddleware();
