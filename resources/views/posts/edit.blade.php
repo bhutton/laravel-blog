@@ -35,6 +35,9 @@
         <a href="{{  url('delete/'.$post->id.'?_token='.csrf_token()) }}" class="btn btn-danger">Delete</a>
     </form>
 
+
+    <h2>{{ $post->title }}</h2>
+
     <div>
         {!! $post->body !!}
     </div>
