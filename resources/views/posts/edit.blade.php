@@ -36,9 +36,14 @@
     </form>
 
 
+    <div class="panel-heading">
     <h2>{{ $post->title }}</h2>
+    <p>{{ $post->created_at->format('M d,Y \a\t h:i a') }} By <a href="{{ url('/user/'.$post->author_id)}}">{{ $post->author->name }}</a></p>
+    <hr>
+    </div>
 
-    <div>
+
+    <div class="panel-body">
         {!! $post->body !!}
     </div>
 @endsection
