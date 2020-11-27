@@ -9,7 +9,7 @@
             selector : "textarea",
             height : "480",
             plugins : ["advlist autolink lists link image charmap print preview anchor", "searchreplace visualblocks code fullscreen", "insertdatetime media table contextmenu paste jbimages"],
-            toolbar : "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image jbimages",
+            toolbar : "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image jbimages"
         });
     </script>
     <form method="post" action='{{ url("/update") }}'>
@@ -19,7 +19,7 @@
             <input required="required" placeholder="Enter title here" type="text" name = "title" class="form-control" value="@if(!old('title')){{$post->title}}@endif{{ old('title') }}"/>
         </div>
         <div class="form-group">
-    <textarea name='body'class="form-control">
+    <textarea title='body' name='body' class="form-control">
       @if(!old('body'))
             {!! $post->body !!}
         @endif
@@ -34,4 +34,16 @@
         <input type="submit" name='save' class="btn btn-default" value = "Save As Draft" />
         <a href="{{  url('delete/'.$post->id.'?_token='.csrf_token()) }}" class="btn btn-danger">Delete</a>
     </form>
+
+
+    <div class="panel-heading">
+    <h2>{{ $post->title }}</h2>
+    <p>{{ $post->created_at->format('M d,Y \a\t h:i a') }} By <a href="{{ url('/user/'.$post->author_id)}}">{{ $post->author->name }}</a></p>
+    <hr>
+    </div>
+
+
+    <div class="panel-body">
+        {!! $post->body !!}
+    </div>
 @endsection

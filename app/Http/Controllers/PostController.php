@@ -46,6 +46,7 @@ class PostController extends Controller
         $post->body = $request->get('body');
         $post->slug = str_slug($post->title);
         $post->author_id = $request->user()->id;
+
         if($request->has('save'))
         {
             $post->active = 0;

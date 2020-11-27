@@ -14,43 +14,53 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <!-- Piwik -->
+    <script type="text/javascript">
+        var _paq = _paq || [];
+        /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function () {
+            var u = "//piwik.altairhosting.com/";
+            _paq.push(['setTrackerUrl', u + 'piwik.php']);
+            _paq.push(['setSiteId', '2']);
+            var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+            g.type = 'text/javascript';
+            g.async = true;
+            g.defer = true;
+            g.src = u + 'piwik.js';
+            s.parentNode.insertBefore(g, s);
+        })();
+    </script>
+    <!-- End Piwik Code -->
   </head>
   <body>
-    <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-            <span class="sr-only">Toggle Navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="http://benhutton.com.au">BenHutton.com.au</a>
-        </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li>
-              <a href="{{ url('/') }}">Home</a>
-            </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            @if (Auth::guest())
-            <li>
-              <a href="{{ url('/login') }}">Login</a>
-            </li>
-            <li>
-              <a href="{{ url('/register') }}">Register</a>
-            </li>
-            @else
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                @if (Auth::user()->can_post())
-                <li>
-                  <a href="{{ url('/new-post') }}">Add new post</a>
-                </li>
-                <li>
-                  <a href="{{ url('/user/'.Auth::id().'/posts') }}">My Posts</a>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle Navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://benhutton.com.au">BenHutton.com.au</a>
+      </div>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+          @if (!Auth::guest())
+
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+               aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              @if (Auth::user()->can_post())
+              <li>
+                <a href="{{ url('/new-post') }}">Add new post</a>
+              </li>
+              <li>
+                <a href="{{ url('/user/'.Auth::id().'/posts') }}">My Posts</a>
                 </li>
                 @endif
                 <li>

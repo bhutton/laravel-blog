@@ -19,7 +19,7 @@ class RouteTest extends TestCase
         $this->assertTrue(true);
         $response = $this->get('/');
         $response->assertStatus(200);
-        $response->assertSee('Home');
+        $response->assertSee('Latest Posts');
     }
 
     /**
@@ -73,7 +73,11 @@ class RouteTest extends TestCase
     {
         $response = $this->get('/register');
         $response->assertSee('/login');
+<<<<<<< HEAD
         $response->assertStatus(200);
+=======
+        $response->assertSuccessful();
+>>>>>>> registerlockdown
 
 
     }

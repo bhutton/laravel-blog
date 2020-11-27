@@ -22,7 +22,7 @@ class Posts extends Migration
                 ->references('id')->on('users')
                 ->onDelete('cascade');
             $table->string('title')->unique();
-            $table->text('body');
+            $table->text('body')->nullable();
             $table->string('slug')->unique();
             $table->boolean('active');
             $table->timestamps();

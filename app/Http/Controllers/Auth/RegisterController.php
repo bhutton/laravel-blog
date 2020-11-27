@@ -36,7 +36,8 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $register = getenv('REGISTER_PAGE');
+        $this->middleware($register);
     }
 
     /**

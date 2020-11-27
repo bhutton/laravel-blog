@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use phpDocumentor\Reflection\Types\Null_;
 use Tests\TestCase;
 use App\User;
 use App\Posts;
@@ -51,6 +52,29 @@ class PostTest extends TestCase
             [
                 'title' => 'test',
                 'body' => '123',
+                'slug' => 'adkf'
+            ]);
+
+        $response = $this->actingAs($user)
+            ->post('/new-post', $case);
+
+        $response->assertStatus(302);
+        $response->assertSee('edit/test');
+    }
+
+    /**
+     * Test creating new post without content
+     */
+    public function testNewPostCreationWithoutContent()
+    {
+        $this->withoutMiddleware();
+
+        $user = $this->authenticateUser();
+
+        $case = factory(Posts::class)->raw(
+            [
+                'title' => 'test',
+                'body' => Null,
                 'slug' => 'adkf'
             ]);
 
@@ -278,6 +302,22 @@ class PostTest extends TestCase
                 'body' => '123',
                 'slug' => 'test',
                 'active' => True,
+            ]);
+
+        $response = $this->get('/test');
+        $response->assertSee('/test');
+    }
+
+    public function testCanViewUnpublishedPost()
+    {
+        factory(Posts::class)->create(
+            [
+                'author_id' => 1,
+                'id' => 1,
+                'title' => 'test',
+                'body' => '123',
+                'slug' => 'test',
+                'active' => False,
             ]);
 
         $response = $this->get('/test');
